@@ -1,73 +1,64 @@
 import 'package:flutter/material.dart';
+import 'home_screen.dart';
+import 'list_screen.dart';
+import 'about_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(TravelGuideApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class TravelGuideApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MaximumBid(),
-    );
-  }
+  _TravelGuideAppState createState() => _TravelGuideAppState();
 }
 
-class MaximumBid extends StatefulWidget {
-  const MaximumBid({super.key});
+class _TravelGuideAppState extends State<TravelGuideApp> {
+  int _selectedIndex = 0;
 
-  @override
-  State<MaximumBid> createState() => _MaximumBidState();
-}
+  final List<Widget> _screens = [
+    HomeScreen(),
+    ListScreen(),
+    AboutScreen(),
+  ];
 
-class _MaximumBidState extends State<MaximumBid> {
-  int currentbid = 0;
-  void bid() {
+  void _onItemTapped(int index) {
     setState(() {
-      currentbid += 50;
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bidding Page',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.deepOrange,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-              child: Text(
-            'Your Current Bid : $currentbid',
-            style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.deepOrange),
-          )),
-          const SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
-            onPressed: bid,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepOrange,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Travel Guide',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Travel Guide', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+          backgroundColor: Colors.teal,
+        ),
+        body: SafeArea(
+          child: _screens[_selectedIndex],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          selectedItemColor: Colors.teal,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
             ),
-            child: const Text(
-              "Increase Bid \$50",
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'Destinations',
             ),
-          ),
-        ],
+            BottomNavigationBarItem(
+              icon: Icon(Icons.info),
+              label: 'About',
+            ),
+          ],
+        ),
       ),
     );
   }
